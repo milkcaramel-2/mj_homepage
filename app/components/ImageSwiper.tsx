@@ -26,17 +26,15 @@ export default function ImageSwiper({ images, productName }: ImageSwiperProps) {
     const threshold = 50;
 
     if (diff > threshold && currentIndex < images.length - 1) {
-      // Swipe left - next image
       setCurrentIndex((prev) => prev + 1);
     } else if (diff < -threshold && currentIndex > 0) {
-      // Swipe right - previous image
       setCurrentIndex((prev) => prev - 1);
     }
   };
 
   return (
     <div className="relative w-full">
-      {/* Image Container */}
+      {/* Main Image Container */}
       <div
         className="relative aspect-square w-full overflow-hidden rounded-lg"
         onTouchStart={handleTouchStart}
@@ -54,7 +52,7 @@ export default function ImageSwiper({ images, productName }: ImageSwiperProps) {
                 alt={`${productName} - ${index + 1}`}
                 fill
                 className="object-cover"
-                sizes="(max-width: 448px) 100vw, 448px"
+                sizes="(max-width: 320px) 100vw, 320px"
                 priority={index === 0}
               />
             </div>
@@ -62,46 +60,33 @@ export default function ImageSwiper({ images, productName }: ImageSwiperProps) {
         </div>
       </div>
 
-      {/* Dot Indicators */}
+      {/* Clickable Thumbnail Gallery */}
       {images.length > 1 && (
-        <div className="absolute bottom-3 left-1/2 flex -translate-x-1/2 gap-1.5">
-          {images.map((_, index) => (
+        <div className="flex gap-2 mt-2 overflow-x-auto pb-1">
+          {images.map((img, index) => (
             <button
               key={index}
               onClick={(e) => {
                 e.stopPropagation();
                 setCurrentIndex(index);
               }}
-              className={`h-1.5 rounded-full transition-all ${
+              className={`relative w-12 h-12 flex-shrink-0 rounded overflow-hidden border-2 transition-all ${
                 currentIndex === index
-                  ? "w-4 bg-white"
-                  : "w-1.5 bg-white/50"
+                  ? "border-stone-800"
+                  : "border-transparent opacity-60 hover:opacity-100"
               }`}
-              aria-label={`이미지 ${index + 1}`}
-            />
+            >
+              <Image
+                src={img}
+                alt={`${productName} - 썸네일 ${index + 1}`}
+                fill
+                className="object-cover"
+                sizes="48px"
+              />
+            </button>
           ))}
-        </div>
-      )}
-
-      {/* Swipe Hint (only on first image) */}
-      {currentIndex === 0 && images.length > 1 && (
-        <div className="absolute right-3 top-1/2 -translate-y-1/2 text-white/70 text-xs">
-          <svg
-            className="w-5 h-5 animate-pulse"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M9 5l7 7-7 7"
-            />
-          </svg>
         </div>
       )}
     </div>
   );
 }
-
