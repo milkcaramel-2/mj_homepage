@@ -20,9 +20,9 @@ export default function Home() {
         {products.map((product) => (
           <section
             key={product.id}
-            className="snap-start h-[calc(100vh-3rem)] w-full flex items-center justify-center p-4"
+            className="snap-start h-[calc(100vh-3rem)] w-full flex items-center justify-center px-4"
           >
-            <div className="w-64">
+            <div className="w-full max-w-sm">
               <ProductCard product={product} />
             </div>
           </section>
