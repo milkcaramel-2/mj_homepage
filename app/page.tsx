@@ -1,130 +1,83 @@
 "use client";
 
-import Image from "next/image";
-import { useState } from "react";
-
-// Product data scraped from Naver Smart Store
-const product = {
-  id: "4797491254",
-  name: "식품조리용 실리콘 푸드매쉬 2매입 ( 다회용 )",
-  originalPrice: 990,
-  salePrice: 490,
-  discountPercent: 50,
-  link: "https://smartstore.naver.com/ricepiemy/products/4797491254",
-  images: [
-    "https://shop-phinf.pstatic.net/20200129_183/1580254348711yzzcc_JPEG/17615891319490032_1950375509.jpg",
-    "https://shop-phinf.pstatic.net/20200129_179/1580254510736K3eUw_JPEG/17616053343629717_326468147.jpg",
-    "https://shop-phinf.pstatic.net/20200129_294/1580253963698n0xML_JPEG/17615506299627616_67802890.jpg",
-    "https://shop-phinf.pstatic.net/20200129_262/1580253970343q4VTz_JPEG/17615512770704089_765662635.jpg",
-  ],
-};
-
-function formatPrice(price: number): string {
-  return price.toLocaleString("ko-KR") + "원";
-}
+import { useState, useRef, useEffect } from "react";
+import { products, categories, Category, getProductsByCategory } from "./data/products";
+import CategoryBookmarks from "./components/CategoryBookmarks";
+import ProductCard from "./components/ProductCard";
 
 export default function Home() {
-  const [selectedImage, setSelectedImage] = useState(0);
+  const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
 
-  const handleProductClick = () => {
-    window.open(product.link, "_blank", "noopener,noreferrer");
-  };
+  // Filter products by selected category
+  const displayedProducts = selectedCategory
+    ? getProductsByCategory(selectedCategory)
+    : products;
+
+  // Reset scroll position when category changes
+  useEffect(() => {
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  }, [selectedCategory]);
 
   return (
-    <div className="min-h-screen bg-stone-50">
+    <div className="h-screen w-full bg-stone-100 overflow-hidden">
       {/* Header */}
-      <header className="sticky top-0 z-50 bg-white border-b border-stone-200">
+      <header className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-sm border-b border-stone-200">
         <div className="max-w-md mx-auto px-4 py-3">
-          <h1 className="text-lg font-bold text-stone-800 text-center">
+          <h1 className="text-base font-bold text-stone-800 text-center">
             메고지고 별내역점
           </h1>
         </div>
       </header>
 
-      {/* Main Content */}
-      <main className="max-w-md mx-auto pb-20">
-        {/* Product Card */}
-        <article 
-          className="bg-white cursor-pointer"
-          onClick={handleProductClick}
-        >
-          {/* Main Image */}
-          <div className="relative aspect-square w-full overflow-hidden">
-            <Image
-              src={product.images[selectedImage]}
-              alt={product.name}
-              fill
-              className="object-cover"
-              sizes="(max-width: 448px) 100vw, 448px"
-              priority
-            />
-            
-            {/* Discount Badge */}
-            <div className="absolute top-3 left-3 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded">
-              {product.discountPercent}% OFF
-            </div>
-          </div>
+      {/* Category Bookmarks - Left Side */}
+      <CategoryBookmarks
+        selectedCategory={selectedCategory}
+        onSelectCategory={setSelectedCategory}
+      />
 
-          {/* Image Gallery Thumbnails */}
-          <div className="flex gap-2 p-3 overflow-x-auto">
-            {product.images.map((img, index) => (
-              <button
-                key={index}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setSelectedImage(index);
-                }}
-                className={`relative w-16 h-16 flex-shrink-0 rounded overflow-hidden border-2 transition-all ${
-                  selectedImage === index
-                    ? "border-stone-800"
-                    : "border-transparent opacity-60 hover:opacity-100"
-                }`}
-              >
-                <Image
-                  src={img}
-                  alt={`${product.name} - 이미지 ${index + 1}`}
-                  fill
-                  className="object-cover"
-                  sizes="64px"
+      {/* Main Content - Snap Scrolling */}
+      <main
+        ref={scrollContainerRef}
+        className="h-screen w-full overflow-y-scroll snap-y snap-mandatory pt-12 pb-4 pl-8 pr-4"
+        style={{ scrollBehavior: "smooth" }}
+      >
+        {displayedProducts.length > 0 ? (
+          displayedProducts.map((product, index) => (
+            <section
+              key={product.id}
+              className="snap-start h-[calc(100vh-4rem)] w-full max-w-sm mx-auto flex items-center justify-center py-4"
+            >
+              <div className="w-full h-full max-h-[600px]">
+                <ProductCard product={product} />
+              </div>
+            </section>
+          ))
+        ) : (
+          <section className="snap-start h-[calc(100vh-4rem)] w-full flex items-center justify-center">
+            <div className="text-center text-stone-500">
+              <p className="text-lg font-medium">상품이 없습니다</p>
+              <p className="text-sm mt-2">다른 카테고리를 선택해주세요</p>
+            </div>
+          </section>
+        )}
+
+        {/* Scroll Indicator */}
+        {displayedProducts.length > 1 && (
+          <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-30">
+            <div className="flex gap-1.5 bg-white/80 backdrop-blur-sm rounded-full px-3 py-2 shadow-sm">
+              {displayedProducts.map((_, index) => (
+                <div
+                  key={index}
+                  className="w-1.5 h-1.5 rounded-full bg-stone-300"
                 />
-              </button>
-            ))}
-          </div>
-
-          {/* Product Info */}
-          <div className="p-4 border-t border-stone-100">
-            <h2 className="text-base font-medium text-stone-800 leading-snug mb-3">
-              {product.name}
-            </h2>
-            
-            <div className="flex items-baseline gap-2">
-              <span className="text-xl font-bold text-stone-900">
-                {formatPrice(product.salePrice)}
-              </span>
-              <span className="text-sm text-stone-400 line-through">
-                {formatPrice(product.originalPrice)}
-              </span>
+              ))}
             </div>
-
-            {/* CTA Hint */}
-            <p className="mt-4 text-xs text-stone-500 text-center">
-              탭하여 상품 페이지로 이동
-            </p>
           </div>
-        </article>
+        )}
       </main>
-
-      {/* Footer */}
-      <footer className="fixed bottom-0 left-0 right-0 bg-white border-t border-stone-200">
-        <div className="max-w-md mx-auto px-4 py-3">
-          <button
-            onClick={handleProductClick}
-            className="w-full bg-stone-800 text-white font-medium py-3 rounded-lg hover:bg-stone-700 active:bg-stone-900 transition-colors"
-          >
-            구매하러 가기
-          </button>
-        </div>
-      </footer>
     </div>
   );
 }
