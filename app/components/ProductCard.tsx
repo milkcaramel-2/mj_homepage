@@ -13,19 +13,20 @@ export default function ProductCard({ product }: ProductCardProps) {
   };
 
   return (
-    <article
-      className="flex flex-col w-full bg-white rounded-xl shadow-sm overflow-hidden cursor-pointer active:scale-[0.99] transition-transform"
-      onClick={handleClick}
-    >
+    <article className="flex flex-col w-full bg-white rounded-xl shadow-sm overflow-hidden">
       {/* Image Gallery with Thumbnails */}
-      <div className="p-3" onClick={(e) => e.stopPropagation()}>
-        <ImageSwiper images={product.images} productName={product.name} />
+      <div className="p-3">
+        <ImageSwiper 
+          images={product.images} 
+          productName={product.name} 
+          onImageClick={handleClick}
+        />
       </div>
 
       {/* Product Info */}
-      <div className="px-3 pb-3">
-        {/* Subtitle - Bold text */}
-        <p className="text-sm font-bold text-stone-900 leading-snug line-clamp-2 mb-1">
+      <div className="px-3 pb-3 cursor-pointer" onClick={handleClick}>
+        {/* Subtitle - Bold text (bigger) */}
+        <p className="text-base font-bold text-stone-900 leading-snug line-clamp-2 mb-1">
           {product.subtitle}
         </p>
 

@@ -31,23 +31,16 @@ body {
 
 /* Hide scrollbar for cleaner mobile look */
 .overflow-y-scroll::-webkit-scrollbar,
-.overflow-x-auto::-webkit-scrollbar {
+.overflow-x-auto::-webkit-scrollbar,
+.scrollbar-hide::-webkit-scrollbar {
   display: none;
 }
 
 .overflow-y-scroll,
-.overflow-x-auto {
+.overflow-x-auto,
+.scrollbar-hide {
   -ms-overflow-style: none;
   scrollbar-width: none;
-}
-
-/* Snap scroll improvements */
-.snap-y {
-  scroll-snap-type: y mandatory;
-}
-
-.snap-start {
-  scroll-snap-align: start;
 }
 
 /* Line clamp utility */
