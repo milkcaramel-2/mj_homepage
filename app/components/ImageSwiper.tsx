@@ -6,9 +6,10 @@ import { useState, useRef, TouchEvent } from "react";
 interface ImageSwiperProps {
   images: string[];
   productName: string;
+  compact?: boolean;
 }
 
-export default function ImageSwiper({ images, productName }: ImageSwiperProps) {
+export default function ImageSwiper({ images, productName, compact = false }: ImageSwiperProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const touchStartX = useRef(0);
   const touchEndX = useRef(0);
@@ -32,6 +33,54 @@ export default function ImageSwiper({ images, productName }: ImageSwiperProps) {
     }
   };
 
+  // Compact mode - just show image with dots
+  if (compact) {
+    return (
+      <div
+        className="relative w-full h-full overflow-hidden"
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div
+          className="flex h-full transition-transform duration-300 ease-out"
+          style={{ transform: `translateX(-${currentIndex * 100}%)` }}
+        >
+          {images.map((img, index) => (
+            <div key={index} className="relative h-full w-full flex-shrink-0">
+              <Image
+                src={img}
+                alt={`${productName} - ${index + 1}`}
+                fill
+                className="object-cover"
+                sizes="128px"
+                priority={index === 0}
+              />
+            </div>
+          ))}
+        </div>
+
+        {/* Dot Indicators */}
+        {images.length > 1 && (
+          <div className="absolute bottom-2 left-1/2 flex -translate-x-1/2 gap-1">
+            {images.map((_, index) => (
+              <div
+                key={index}
+                className={`h-1 rounded-full transition-all ${
+                  currentIndex === index
+                    ? "w-2.5 bg-white"
+                    : "w-1 bg-white/50"
+                }`}
+              />
+            ))}
+          </div>
+        )}
+      </div>
+    );
+  }
+
+  // Full mode with thumbnails
   return (
     <div className="relative w-full">
       {/* Main Image Container */}

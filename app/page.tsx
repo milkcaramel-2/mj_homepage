@@ -15,18 +15,13 @@ export default function Home() {
         </div>
       </header>
 
-      {/* Main Content - Snap Scrolling */}
-      <main className="h-screen w-full overflow-y-scroll snap-y snap-mandatory pt-12">
-        {products.map((product) => (
-          <section
-            key={product.id}
-            className="snap-start h-[calc(100vh-3rem)] w-full flex items-center justify-center px-4"
-          >
-            <div className="w-full max-w-sm">
-              <ProductCard product={product} />
-            </div>
-          </section>
-        ))}
+      {/* Main Content - Scrollable List */}
+      <main className="w-full max-w-md mx-auto pt-14 pb-6 px-4">
+        <div className="flex flex-col gap-4">
+          {products.map((product) => (
+            <ProductCard key={product.id} product={product} />
+          ))}
+        </div>
       </main>
     </div>
   );
