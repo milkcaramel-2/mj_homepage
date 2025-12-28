@@ -6,10 +6,9 @@ import { useState, useRef, TouchEvent } from "react";
 interface ImageSwiperProps {
   images: string[];
   productName: string;
-  compact?: boolean;
 }
 
-export default function ImageSwiper({ images, productName, compact = false }: ImageSwiperProps) {
+export default function ImageSwiper({ images, productName }: ImageSwiperProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const touchStartX = useRef(0);
   const touchEndX = useRef(0);
@@ -33,54 +32,6 @@ export default function ImageSwiper({ images, productName, compact = false }: Im
     }
   };
 
-  // Compact mode - just show image with dots
-  if (compact) {
-    return (
-      <div
-        className="relative w-full h-full overflow-hidden"
-        onTouchStart={handleTouchStart}
-        onTouchMove={handleTouchMove}
-        onTouchEnd={handleTouchEnd}
-        onClick={(e) => e.stopPropagation()}
-      >
-        <div
-          className="flex h-full transition-transform duration-300 ease-out"
-          style={{ transform: `translateX(-${currentIndex * 100}%)` }}
-        >
-          {images.map((img, index) => (
-            <div key={index} className="relative h-full w-full flex-shrink-0">
-              <Image
-                src={img}
-                alt={`${productName} - ${index + 1}`}
-                fill
-                className="object-cover"
-                sizes="128px"
-                priority={index === 0}
-              />
-            </div>
-          ))}
-        </div>
-
-        {/* Dot Indicators */}
-        {images.length > 1 && (
-          <div className="absolute bottom-2 left-1/2 flex -translate-x-1/2 gap-1">
-            {images.map((_, index) => (
-              <div
-                key={index}
-                className={`h-1 rounded-full transition-all ${
-                  currentIndex === index
-                    ? "w-2.5 bg-white"
-                    : "w-1 bg-white/50"
-                }`}
-              />
-            ))}
-          </div>
-        )}
-      </div>
-    );
-  }
-
-  // Full mode with thumbnails
   return (
     <div className="relative w-full">
       {/* Main Image Container */}
@@ -101,12 +52,28 @@ export default function ImageSwiper({ images, productName, compact = false }: Im
                 alt={`${productName} - ${index + 1}`}
                 fill
                 className="object-cover"
-                sizes="(max-width: 320px) 100vw, 320px"
+                sizes="(max-width: 384px) 100vw, 384px"
                 priority={index === 0}
               />
             </div>
           ))}
         </div>
+
+        {/* Dot Indicators on image */}
+        {images.length > 1 && (
+          <div className="absolute bottom-3 left-1/2 flex -translate-x-1/2 gap-1.5">
+            {images.map((_, index) => (
+              <div
+                key={index}
+                className={`h-1.5 rounded-full transition-all ${
+                  currentIndex === index
+                    ? "w-4 bg-white"
+                    : "w-1.5 bg-white/50"
+                }`}
+              />
+            ))}
+          </div>
+        )}
       </div>
 
       {/* Clickable Thumbnail Gallery */}
@@ -119,7 +86,7 @@ export default function ImageSwiper({ images, productName, compact = false }: Im
                 e.stopPropagation();
                 setCurrentIndex(index);
               }}
-              className={`relative w-12 h-12 flex-shrink-0 rounded overflow-hidden border-2 transition-all ${
+              className={`relative w-14 h-14 flex-shrink-0 rounded overflow-hidden border-2 transition-all ${
                 currentIndex === index
                   ? "border-stone-800"
                   : "border-transparent opacity-60 hover:opacity-100"
@@ -130,7 +97,7 @@ export default function ImageSwiper({ images, productName, compact = false }: Im
                 alt={`${productName} - 썸네일 ${index + 1}`}
                 fill
                 className="object-cover"
-                sizes="48px"
+                sizes="56px"
               />
             </button>
           ))}
