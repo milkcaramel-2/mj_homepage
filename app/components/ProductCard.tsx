@@ -24,8 +24,13 @@ export default function ProductCard({ product }: ProductCardProps) {
 
       {/* Product Info */}
       <div className="px-3 pb-3">
+        {/* Subtitle - Bold text */}
+        <p className="text-sm font-bold text-stone-900 leading-snug line-clamp-2 mb-1">
+          {product.subtitle}
+        </p>
+
         {/* Product Name */}
-        <h2 className="text-sm font-medium text-stone-800 leading-snug line-clamp-2 mb-2">
+        <h2 className="text-sm font-medium text-stone-600 leading-snug line-clamp-2 mb-2">
           {product.name}
         </h2>
 

@@ -6,6 +6,7 @@ export type Category = "떡" | "탕 재료" | "음료" | "군것질" | "선물�
 export interface Product {
   id: string;
   name: string;
+  subtitle: string; // Bold text above product name
   originalPrice: number;
   salePrice: number;
   discountPercent: number;
@@ -28,6 +29,7 @@ export const products: Product[] = [
   {
     id: "4797491254",
     name: "식품조리용 실리콘 푸드매쉬 2매입 ( 다회용 )",
+    subtitle: "식품조리용 실리콘 푸드매쉬 2매입 ( 다회용 )", // Change this later
     originalPrice: 990,
     salePrice: 490,
     discountPercent: 50,
@@ -43,6 +45,7 @@ export const products: Product[] = [
   {
     id: "5846370302",
     name: "메고지고 꾸덕 그릭요거트 발효용기",
+    subtitle: "메고지고 꾸덕 그릭요거트 발효용기", // Change this later
     originalPrice: 5900,
     salePrice: 5900,
     discountPercent: 0,
