@@ -31,7 +31,7 @@ export const products: Product[] = [
     originalPrice: 990,
     salePrice: 490,
     discountPercent: 50,
-    category: "떡", // Assign appropriate category
+    category: "떡",
     link: "https://smartstore.naver.com/ricepiemy/products/4797491254",
     images: [
       "https://shop-phinf.pstatic.net/20200129_183/1580254348711yzzcc_JPEG/17615891319490032_1950375509.jpg",
@@ -40,21 +40,20 @@ export const products: Product[] = [
       "https://shop-phinf.pstatic.net/20200129_262/1580253970343q4VTz_JPEG/17615512770704089_765662635.jpg",
     ],
   },
-  // Add more products here following the same structure
-  // Example:
-  // {
-  //   id: "PRODUCT_ID",
-  //   name: "제품명",
-  //   originalPrice: 10000,
-  //   salePrice: 8000,
-  //   discountPercent: 20,
-  //   category: "떡",
-  //   link: "https://smartstore.naver.com/ricepiemy/products/PRODUCT_ID",
-  //   images: [
-  //     "image_url_1",
-  //     "image_url_2",
-  //   ],
-  // },
+  {
+    id: "5846370302",
+    name: "메고지고 꾸덕 그릭요거트 발효용기",
+    originalPrice: 5900,
+    salePrice: 5900,
+    discountPercent: 0,
+    category: "음료",
+    link: "https://naver.me/xbj5KDua",
+    images: [
+      "https://shop-phinf.pstatic.net/20210907_66/1630991394214QEjNg_JPEG/32127177929351575_1765482681.jpg",
+      "https://shop-phinf.pstatic.net/20210907_109/1630991385515rm4dQ_JPEG/32127213329063061_197782166.jpg",
+      "https://shop-phinf.pstatic.net/20210907_77/1630991406888XxCyS_JPEG/32127186614759790_269774330.jpg",
+    ],
+  },
 ];
 
 // Helper function to get products by category
@@ -66,4 +65,3 @@ export function getProductsByCategory(category: Category): Product[] {
 export function formatPrice(price: number): string {
   return price.toLocaleString("ko-KR") + "원";
 }
-
